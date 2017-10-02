@@ -1,0 +1,12 @@
+{
+  "name": "whitecane",
+  "version": "0.0.0",
+  "description": "Test game thingy",
+  "main": "src/index.js",
+  "scripts": {
+    "log": "tic80 > log.txt",
+    "start": "tic80 cart.tic -code src/index.js"
+  },
+  "author": "Misteki",
+  "license": "ISC"
+}
