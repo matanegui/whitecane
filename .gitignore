@@ -1,3 +1,5 @@
-dist/
-node_modules/
-package-lock.json
+# compiled output
+/dist
+
+# dependencies
+/node_modules
