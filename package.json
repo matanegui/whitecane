@@ -5,7 +5,10 @@
   "main": "src/index.js",
   "scripts": {
     "log": "tic80 > log.txt",
-    "start": "tic80 cart.tic -code src/index.js"
+    "load-cart": "tic80 cart.tic",
+    "start": "tic80 cart.tic -code src/index.js",
+    "build": "sh scripts/build.sh",
+    "start-build": "tic80 cart.tic -code dist/index.min.js"
   },
   "author": "Misteki",
   "license": "ISC"

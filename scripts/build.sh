@@ -1,0 +1,1 @@
+minify src/index.js > dist/index.min.js && cat src/tic-header.js dist/index.min.js > tmp && mv tmp dist/index.min.js
