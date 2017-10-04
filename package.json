@@ -11,5 +11,6 @@
     "start-build": "tic80 cart.tic -code dist/index.min.js"
   },
   "author": "Misteki",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {}
 }
