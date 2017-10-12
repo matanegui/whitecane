@@ -5,11 +5,11 @@
     "desc": "TIC-80 test",
     "cart": "cart.tic",
     "input":"mouse",
-    "backup": true
+    "backup": false
   },
   "tic": {
     "ticExecutable": "tic80",
-    "cartsDirectory": "."
+    "cartsDirectory": "./cart"
   },
   "compression": {
     "compressedFile": "build/compressed.js",
