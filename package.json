@@ -4,17 +4,9 @@
   "description": "Test game thingy",
   "main": "src/index.js",
   "scripts": {
-    "log": "tic80 > log.txt",
-    "load-cart": "tic80 cart.tic",
-    "start": "tic80 cart.tic -code src/index.js",
-    "build": "minify src/index.js > dist/index.min.js && shx cat src/tic-header.js dist/index.min.js > tmp && shx mv tmp dist/index.min.js",
-    "start-build": "tic80 cart.tic -code dist/index.min.js",
-    "minify": "minify src/index.js > dist/index.min.js"
+    "start": "node ./tsc80.js"
   },
   "author": "Misteki",
   "license": "ISC",
-  "dependencies": {
-    "minify": "^3.0.1",
-    "shx": "^0.2.2"
-  }
+  "dependencies": {}
 }
