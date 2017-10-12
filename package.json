@@ -4,9 +4,9 @@
   "description": "Test game thingy",
   "main": "src/index.js",
   "scripts": {
-    "log": "tic80 > log.txt",
-    "start": "tic80 cart.tic -code src/index.js"
+    "start": "tsc80 run"
   },
   "author": "Misteki",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {}
 }
