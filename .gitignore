@@ -1,5 +1,5 @@
 # compiled output
-/build
+build/
 
 # dependencies
-/node_modules
+node_modules/
