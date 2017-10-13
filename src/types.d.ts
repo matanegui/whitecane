@@ -16,3 +16,31 @@ interface Padding {
   left: 2,
   right: 2
 }
+
+interface Cursor {
+  x: number,
+  y: number,
+  sprite: number
+}
+
+interface Scene {
+  tilemap: {
+    x: number,
+    y: number
+  },
+  walkers: any[],
+  barriers: any[],
+  bends: any[],
+  cursor: Cursor
+}
+
+interface AnimationData {
+  [entityKey:string] : {
+    [id:string] : {
+      sprites: number[],
+      scale?:number,
+      flip?:number,
+      rotate?:number
+    }
+  }
+}

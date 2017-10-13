@@ -10,16 +10,18 @@ function log(o) {
 //Constants
 const TILE_SCALE = 2
 const TILE_SIZE = 8
-const ANIMATIONS = {
+const ANIMATIONS: AnimationData = {
   WALKER: {
-    DOWN: [288, 290, 288, 292],
-    UP: [294, 296, 294, 298],
-    RIGHT: [300, 302, 300, 320],
-    LEFT: [322, 324, 322, 326]
+    DOWN: {sprites: [288, 290, 288, 292]},
+    UP: {sprites:[294, 296, 294, 298]},
+    RIGHT: {sprites:[300, 302, 300, 320]},
+    LEFT: {sprites:[322, 324, 322, 326]}
   },
   BARRIER: {
-    DOWN: [42],
-    RIGHT: [40]
+    DOWN: {sprites:[42]},
+    RIGHT: {sprites:[40]},
+    UP: {sprites:[42], flip:3},
+    LEFT: {sprites:[40], flip:3},
   }
 }
 const COLLISION_DELAY = 50;
@@ -42,7 +44,7 @@ let mouseData: MouseData = {
   p: 0,
   lastClickStamp: 0
 }
-const scene = {
+const scene: Scene = {
   tilemap: {
     x: 0,
     y: 0
@@ -69,6 +71,15 @@ const scene = {
       { animationId: "RIGHT", bounce: "DOWN" },
       { animationId: "DOWN", bounce: "RIGHT" }
     ]
+  },
+  {
+    type: "BARRIER",
+    x: 160,
+    y: 104,
+    directions: [
+      { animationId: "LEFT", bounce: "UP" },
+      { animationId: "UP", bounce: "LEFT" }
+    ]
   }],
   bends: [],
   cursor: {
@@ -78,7 +89,7 @@ const scene = {
   }
 }
 
-function initScene(scene): void {
+function initScene(scene: Scene): void {
   //Get scene data from map
   const mapPadding: Padding = {
     top: 3,
@@ -105,6 +116,7 @@ function initScene(scene): void {
         switch (entityData.type) {
           case "BEND":
             scene.bends.push({ x: x * TILE_SIZE, y: y * TILE_SIZE, directions: entityData.directions, type: entityData.type })
+            break;
         }
       }
     }
@@ -133,13 +145,11 @@ function getInput(mouseData: MouseData): MouseData {
 
 }
 
-function update(input, scene, delta): void {
+function update(input: MouseData, scene: Scene, delta: number): void {
 
-  function getCursorPosition(mouseData: MouseData): Point {
-    return {
-      x: Math.floor((mouseData.x) / 16) * 16,
-      y: Math.floor((mouseData.y + 8) / 16) * 16 - 8
-    }
+  function updateCursor(mouseData: MouseData, cursor: Cursor): void {
+    cursor.x = Math.floor((mouseData.x) / 16) * 16,
+    cursor.y = Math.floor((mouseData.y + 8) / 16) * 16 - 8
   }
 
   function onBarrierClick(mouseData: MouseData, barriers): void {
@@ -155,9 +165,9 @@ function update(input, scene, delta): void {
     })
   }
 
-  function move(walkers, barriers, bends, delta) {
+  function move(walkers, barriers, bends, delta: number): void {
 
-    function isCollisionDelayOver(timestamp) {
+    function isCollisionDelayOver(timestamp: number): boolean {
       return time() - timestamp > COLLISION_DELAY;
     }
 
@@ -209,16 +219,17 @@ function update(input, scene, delta): void {
     })
   }
 
-  function animate(scene, delta: number): void {
+  function animate(scene: Scene, delta: number): void {
     function animateEntity(entity, delta) {
       const a = ANIMATIONS[entity.type][entity.animationId]
       const aDelta = delta * 100
       const isNewFrame = entity.animationTimestamp + aDelta >= entity.animationSpeed
       entity.animationFrameIndex = isNewFrame
-        ? (entity.animationFrameIndex + 1 < a.length ? entity.animationFrameIndex + 1 : 0)
+        ? (entity.animationFrameIndex + 1 < a.sprites.length ? entity.animationFrameIndex + 1 : 0)
         : entity.animationFrameIndex
       entity.animationTimestamp = isNewFrame ? 0 : entity.animationTimestamp + aDelta
-      entity.sprite = a[entity.animationFrameIndex]
+      entity.sprite = a.sprites[entity.animationFrameIndex]
+      entity.spriteFlip = a.flip ? a.flip : 0
     }
 
     scene.walkers.forEach(function (walker) {
@@ -229,7 +240,7 @@ function update(input, scene, delta): void {
     })
   }
 
-  scene.cursor = getCursorPosition(input)
+  updateCursor(input, scene.cursor)
   onBarrierClick(input, scene.barriers)
   move(scene.walkers, scene.barriers, scene.bends, delta)
   animate(scene, delta)
@@ -244,7 +255,7 @@ function draw(scene): void {
   })
   //Draw barriers
   scene.barriers.forEach(function (barrier) {
-    spr(barrier.sprite, barrier.x, barrier.y, 0, 1, 0, 0, TILE_SCALE, TILE_SCALE)
+    spr(barrier.sprite, barrier.x, barrier.y, 0, 1, barrier.spriteFlip, 0, TILE_SCALE, TILE_SCALE)
   })
   //Draw cursor
   let cursorSpr: number = 44
